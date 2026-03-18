@@ -1,7 +1,8 @@
-import { Eye, EyeSlash, ChartLine, Trophy, Newspaper } from '@phosphor-icons/react';
+import { Eye, EyeSlash, ChartLine, Trophy, Newspaper, Globe } from '@phosphor-icons/react';
 import useDashboardStore from '../../store/dashboardStore';
 
 const FINANCE_WIDGETS = [
+  { key: 'marketTicker', label: 'Market Ticker' },
   { key: 'stockPredictions', label: 'Stock Signals' },
   { key: 'stockChart', label: 'Stock Chart' },
   { key: 'trendPredictor', label: 'Trend Predictor' },

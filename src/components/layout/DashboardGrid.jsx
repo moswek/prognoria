@@ -4,6 +4,7 @@ import StockChart from '../finance/StockChart';
 import TrendPredictor from '../finance/TrendPredictor';
 import WatchlistTable from '../finance/WatchlistTable';
 import NewsWidget from '../finance/NewsWidget';
+import MarketTicker from '../finance/MarketTicker';
 import SportsPredictions from '../sports/SportsPredictions';
 import FormTable from '../sports/FormTable';
 import LiveScores from '../sports/LiveScores';
@@ -124,12 +125,17 @@ const SportsWidgets = () => {
 };
 
 const DashboardGrid = () => {
-  const { sectors } = useDashboardStore();
+  const { sectors, widgets } = useDashboardStore();
 
   return (
     <div className="p-6 space-y-8">
       {sectors.finance && (
         <section>
+          {widgets.finance.marketTicker && (
+            <div className="-mx-6 -mt-6 mb-6">
+              <MarketTicker />
+            </div>
+          )}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-1 h-6 bg-accent rounded-full" />
             <h2 className="font-display text-xl font-bold text-white">
