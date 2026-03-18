@@ -5,6 +5,7 @@ import TrendPredictor from '../finance/TrendPredictor';
 import WatchlistTable from '../finance/WatchlistTable';
 import NewsWidget from '../finance/NewsWidget';
 import MarketTicker from '../finance/MarketTicker';
+import TradeSimulator from '../finance/TradeSimulator';
 import SportsPredictions from '../sports/SportsPredictions';
 import FormTable from '../sports/FormTable';
 import LiveScores from '../sports/LiveScores';
@@ -23,7 +24,13 @@ const FinanceWidgets = () => {
           <StockPredictions />
         </div>
         
-        {widgetCount > 1 && (
+        {widgets.finance.tradeSimulator && (
+          <div className="lg:col-span-12">
+            <TradeSimulator />
+          </div>
+        )}
+        
+        {widgetCount > 2 && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
             {widgets.finance.stockChart && (
               <div className={widgets.finance.trendPredictor || widgets.finance.newsWidget ? "lg:col-span-8" : "lg:col-span-12"}>

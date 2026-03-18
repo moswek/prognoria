@@ -31,6 +31,7 @@ const useDashboardStore = create(
           watchlistTable: false,
           newsWidget: true,
           marketTicker: true,
+          tradeSimulator: true,
         },
         sports: {
           matchPredictor: true,

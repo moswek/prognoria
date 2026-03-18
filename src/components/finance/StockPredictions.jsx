@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowUp, ArrowDown, Clock, Warning, ChartLine, Bell } from '@phosphor-icons/react';
+import { ArrowUp, ArrowDown, Clock, ChartLine, Play } from '@phosphor-icons/react';
 import { fetchAllPredictions, DEFAULT_STOCKS } from '../../services/predictions';
 import useDashboardStore from '../../store/dashboardStore';
+import useTradeStore from '../../store/tradeStore';
+import { playSound } from '../../utils/notifications';
 
 const getSignalConfig = (signal) => {
   switch (signal) {
@@ -18,9 +20,10 @@ const getSignalConfig = (signal) => {
   }
 };
 
-const PredictionCard = ({ stock, onSelect }) => {
+const PredictionCard = ({ stock, onSelect, onTakeTrade }) => {
   const config = getSignalConfig(stock.signal);
   const isPositive = stock.change >= 0;
+  const canTrade = stock.signal.includes('BUY') || stock.signal.includes('SELL');
 
   return (
     <div 
@@ -75,6 +78,19 @@ const PredictionCard = ({ stock, onSelect }) => {
         </div>
       </div>
 
+      {canTrade && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onTakeTrade(stock);
+          }}
+          className="mt-3 w-full py-2 bg-accent/20 hover:bg-accent/30 border border-accent/30 rounded-lg text-accent text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+        >
+          <Play size={12} weight="fill" />
+          TAKE TRADE
+        </button>
+      )}
+
       <div className="mt-2 pt-2 border-t border-white/5">
         <p className="text-xs text-gray-500 truncate">{stock.reason}</p>
       </div>
@@ -88,6 +104,7 @@ const StockPredictions = () => {
   const [lastUpdate, setLastUpdate] = useState(null);
   const alertedRef = useRef(new Set());
   const { setSelectedTicker, addAlert } = useDashboardStore();
+  const { addTrade } = useTradeStore();
 
   const fetchPredictions = async () => {
     try {
@@ -124,6 +141,18 @@ const StockPredictions = () => {
     const interval = setInterval(fetchPredictions, 60000);
     return () => clearInterval(interval);
   }, []);
+
+  const handleTakeTrade = (stock) => {
+    addTrade({
+      symbol: stock.symbol,
+      type: stock.signal.includes('BUY') ? 'LONG' : 'SHORT',
+      signal: stock.signal,
+      entryPrice: stock.price,
+      target: parseFloat(stock.exitTarget),
+      stopLoss: parseFloat(stock.stopLoss),
+    });
+    playSound(stock.signal.includes('BUY') ? 'buy' : 'sell');
+  };
 
   const handleSelectStock = (symbol) => {
     setSelectedTicker(symbol);
@@ -173,7 +202,7 @@ const StockPredictions = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {strongBuys.map(stock => (
-                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} />
+                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} onTakeTrade={handleTakeTrade} />
                 ))}
               </div>
             </div>
@@ -186,7 +215,7 @@ const StockPredictions = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {holds.map(stock => (
-                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} />
+                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} onTakeTrade={handleTakeTrade} />
                 ))}
               </div>
             </div>
@@ -199,7 +228,7 @@ const StockPredictions = () => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {strongSells.map(stock => (
-                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} />
+                  <PredictionCard key={stock.symbol} stock={stock} onSelect={handleSelectStock} onTakeTrade={handleTakeTrade} />
                 ))}
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Eye, EyeSlash, ChartLine, Trophy, Newspaper, Globe } from '@phosphor-icons/react';
+import { Eye, EyeSlash, ChartLine, Trophy, Newspaper, Globe, ChartBar } from '@phosphor-icons/react';
 import useDashboardStore from '../../store/dashboardStore';
 
 const FINANCE_WIDGETS = [
@@ -8,6 +8,7 @@ const FINANCE_WIDGETS = [
   { key: 'trendPredictor', label: 'Trend Predictor' },
   { key: 'watchlistTable', label: 'Watchlist' },
   { key: 'newsWidget', label: 'Stock News' },
+  { key: 'tradeSimulator', label: 'Trade Simulator' },
 ];
 
 const SPORTS_WIDGETS = [
