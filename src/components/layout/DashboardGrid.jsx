@@ -5,6 +5,7 @@ import TrendPredictor from '../finance/TrendPredictor';
 import WatchlistTable from '../finance/WatchlistTable';
 import NewsWidget from '../finance/NewsWidget';
 import SportsPredictions from '../sports/SportsPredictions';
+import FormTable from '../sports/FormTable';
 import LiveScores from '../sports/LiveScores';
 
 const FinanceWidgets = () => {
@@ -52,17 +53,6 @@ const FinanceWidgets = () => {
     );
   }
 
-  if (widgetCount === 1) {
-    return (
-      <div className="grid grid-cols-1 gap-4">
-        {widgets.finance.stockChart && <StockChart />}
-        {widgets.finance.trendPredictor && <TrendPredictor />}
-        {widgets.finance.newsWidget && <NewsWidget symbol={selectedTicker} />}
-        {widgets.finance.watchlistTable && <WatchlistTable />}
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {widgets.finance.stockChart && (
@@ -106,7 +96,9 @@ const FinanceWidgets = () => {
 const SportsWidgets = () => {
   const { widgets } = useDashboardStore();
 
-  if (!widgets.sports.matchPredictor && !widgets.sports.liveScores) return null;
+  if (!widgets.sports.matchPredictor && !widgets.sports.formTable && !widgets.sports.liveScores) {
+    return null;
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -116,8 +108,14 @@ const SportsWidgets = () => {
         </div>
       )}
       
-      {widgets.sports.liveScores && (
+      {widgets.sports.formTable && (
         <div className={widgets.sports.matchPredictor ? 'lg:col-span-6' : 'lg:col-span-12'}>
+          <FormTable />
+        </div>
+      )}
+      
+      {widgets.sports.liveScores && (
+        <div className="lg:col-span-12">
           <LiveScores />
         </div>
       )}

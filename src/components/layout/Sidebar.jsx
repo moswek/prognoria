@@ -10,9 +10,9 @@ const FINANCE_WIDGETS = [
 ];
 
 const SPORTS_WIDGETS = [
-  { key: 'matchPredictor', label: 'Match Predictions' },
-  { key: 'formTable', label: 'Form Table' },
-  { key: 'liveScores', label: 'Live Scores' },
+  { key: 'matchPredictor', label: 'Predictions' },
+  { key: 'formTable', label: 'League Table' },
+  { key: 'liveScores', label: 'Results' },
 ];
 
 const Sidebar = () => {

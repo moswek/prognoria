@@ -1,43 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 
 const SPORTS_DB_KEY = '3';
 const BASE_URL = `https://www.thesportsdb.com/api/v1/json/${SPORTS_DB_KEY}`;
 
 const LEAGUES = [
-  { id: 4328, name: 'Premier League', country: 'England' },
-  { id: 4334, name: 'La Liga', country: 'Spain' },
-  { id: 4331, name: 'Bundesliga', country: 'Germany' },
-  { id: 4332, name: 'Serie A', country: 'Italy' },
-  { id: 4335, name: 'Ligue 1', country: 'France' },
-  { id: 4387, name: 'NBA', country: 'USA' },
+  { id: 4328, name: 'Premier League', country: 'England', short: 'EPL' },
+  { id: 4334, name: 'La Liga', country: 'Spain', short: 'LLiga' },
+  { id: 4331, name: 'Bundesliga', country: 'Germany', short: 'Bundes' },
+  { id: 4332, name: 'Serie A', country: 'Italy', short: 'SerieA' },
+  { id: 4335, name: 'Ligue 1', country: 'France', short: 'L1' },
+  { id: 4387, name: 'NBA', country: 'USA', short: 'NBA' },
 ];
-
-const MOCK_UPCOMING = [
-  { idEvent: '1', strHomeTeam: 'Man City', strAwayTeam: 'Liverpool', strLeague: 'Premier League', dateEvent: '2026-03-22', strTime: '17:30', strHomeTeamBadge: '', strAwayTeamBadge: '' },
-  { idEvent: '2', strHomeTeam: 'Arsenal', strAwayTeam: 'Chelsea', strLeague: 'Premier League', dateEvent: '2026-03-23', strTime: '16:00', strHomeTeamBadge: '', strAwayTeamBadge: '' },
-  { idEvent: '3', strHomeTeam: 'Real Madrid', strAwayTeam: 'Barcelona', strLeague: 'La Liga', dateEvent: '2026-03-23', strTime: '20:00', strHomeTeamBadge: '', strAwayTeamBadge: '' },
-  { idEvent: '4', strHomeTeam: 'Bayern Munich', strAwayTeam: 'Dortmund', strLeague: 'Bundesliga', dateEvent: '2026-03-22', strTime: '17:30', strHomeTeamBadge: '', strAwayTeamBadge: '' },
-];
-
-const MOCK_PAST = [
-  { idEvent: '101', strHomeTeam: 'Man United', strAwayTeam: 'Tottenham', strLeague: 'Premier League', dateEvent: '2026-03-18', intHomeScore: '2', intAwayScore: '1' },
-  { idEvent: '102', strHomeTeam: 'PSG', strAwayTeam: 'Marseille', strLeague: 'Ligue 1', dateEvent: '2026-03-17', intHomeScore: '3', intAwayScore: '0' },
-  { idEvent: '103', strHomeTeam: 'Lakers', strAwayTeam: 'Celtics', strLeague: 'NBA', dateEvent: '2026-03-18', intHomeScore: '118', intAwayScore: '112' },
-];
-
-const MOCK_FORMS = {
-  'Man City': 'WWWWD',
-  'Liverpool': 'WWWDW',
-  'Arsenal': 'WDWWW',
-  'Chelsea': 'LLDLW',
-  'Tottenham': 'WLWDL',
-  'Man United': 'WLDWW',
-  'Real Madrid': 'WWWWW',
-  'Barcelona': 'WDWWW',
-  'Bayern Munich': 'WWWDW',
-  'Dortmund': 'WLWDL',
-};
 
 const fetchFromAPI = async (endpoint, params = {}) => {
   try {
@@ -51,14 +25,12 @@ const fetchFromAPI = async (endpoint, params = {}) => {
 
 export const fetchUpcomingMatches = async (leagueId = 4328) => {
   const data = await fetchFromAPI('eventsnextleague.php', { id: leagueId });
-  if (data?.events) return data.events.slice(0, 10);
-  return MOCK_UPCOMING;
+  return data?.events || [];
 };
 
 export const fetchPastMatches = async (leagueId = 4328) => {
   const data = await fetchFromAPI('eventspastleague.php', { id: leagueId });
-  if (data?.events) return data.events.slice(0, 10);
-  return MOCK_PAST;
+  return data?.events || [];
 };
 
 export const fetchLeagueTeams = async (leagueId = 4328) => {
@@ -77,14 +49,31 @@ export const fetchTeamDetails = async (teamId) => {
   return data?.teams?.[0] || null;
 };
 
-export const fetchTeamLastMatches = async (teamId) => {
-  const data = await fetchFromAPI('eventslast.php', { teamId });
-  return data?.results || [];
+const calculateFormFromResults = (matches, teamName, isHome = true) => {
+  const teamKey = isHome ? 'strHomeTeam' : 'strAwayTeam';
+  const oppKey = isHome ? 'strAwayTeam' : 'strHomeTeam';
+  const scoreKey = isHome ? 'intHomeScore' : 'intAwayScore';
+  const oppScoreKey = isHome ? 'intAwayScore' : 'intHomeScore';
+  
+  const last5 = matches
+    .filter(m => m[teamKey] === teamName && m[scoreKey] !== null)
+    .slice(0, 5);
+  
+  return last5.map(m => {
+    const score = parseInt(m[scoreKey]);
+    const oppScore = parseInt(m[oppScoreKey]);
+    if (score > oppScore) return 'W';
+    if (score === oppScore) return 'D';
+    return 'L';
+  }).join('');
 };
 
-export const generateMatchPrediction = (homeTeam, awayTeam) => {
-  const homeForm = MOCK_FORMS[homeTeam] || 'DLWLW';
-  const awayForm = MOCK_FORMS[awayTeam] || 'DLWLW';
+export const generateMatchPrediction = (homeTeam, awayTeam, pastMatches = []) => {
+  const homeForm = calculateFormFromResults(pastMatches, homeTeam, true);
+  const awayForm = calculateFormFromResults(pastMatches, awayTeam, false);
+  
+  const actualHomeForm = homeForm.length >= 3 ? homeForm : 'DLWWW';
+  const actualAwayForm = awayForm.length >= 3 ? awayForm : 'WLDDL';
   
   const formScore = (form) => {
     return form.split('').reduce((acc, r) => {
@@ -94,17 +83,22 @@ export const generateMatchPrediction = (homeTeam, awayTeam) => {
     }, 0);
   };
   
-  const homeScore = formScore(homeForm);
-  const awayScore = formScore(awayForm);
-  const total = homeScore + awayScore + 1;
+  const homeScore = formScore(actualHomeForm);
+  const awayScore = formScore(actualAwayForm);
+  const total = homeScore + awayScore + 3;
   
   let homeProb = (homeScore / total) * 100;
   let awayProb = (awayScore / total) * 100;
   let drawProb = 100 - homeProb - awayProb;
   
-  homeProb = Math.max(20, Math.min(70, homeProb + 15));
-  awayProb = Math.max(15, Math.min(60, awayProb + 10));
-  drawProb = Math.max(10, 100 - homeProb - awayProb);
+  const homeAdvantage = 10;
+  homeProb += homeAdvantage;
+  drawProb -= 5;
+  awayProb -= 5;
+  
+  homeProb = Math.max(15, Math.min(75, homeProb));
+  awayProb = Math.max(10, Math.min(60, awayProb));
+  drawProb = Math.max(10, Math.min(40, 100 - homeProb - awayProb));
   
   const sum = homeProb + awayProb + drawProb;
   homeProb = (homeProb / sum) * 100;
@@ -112,21 +106,29 @@ export const generateMatchPrediction = (homeTeam, awayTeam) => {
   drawProb = (drawProb / sum) * 100;
   
   let recommendation = 'BET_DRAW';
-  let confidence = 50;
+  let confidence = 45;
   
   if (homeProb > awayProb + 15) {
     recommendation = 'BET_HOME';
-    confidence = Math.min(85, 60 + (homeProb - awayProb) / 2);
+    confidence = Math.min(85, 55 + (homeProb - awayProb) / 2);
   } else if (awayProb > homeProb + 15) {
     recommendation = 'BET_AWAY';
-    confidence = Math.min(85, 60 + (awayProb - homeProb) / 2);
-  } else if (drawProb > 30) {
+    confidence = Math.min(85, 55 + (awayProb - homeProb) / 2);
+  } else if (drawProb > 35) {
     recommendation = 'BET_DRAW';
-    confidence = 55 + drawProb / 3;
+    confidence = 50 + drawProb / 3;
   }
   
-  const recentForm = homeScore > awayScore ? homeForm : awayForm;
-  const streak = recentForm.match(/W{2,}|L{2,}/)?.[0] || '';
+  const getStreak = (form) => {
+    if (!form) return 'No recent form';
+    const wins = form.match(/W+/g) || [];
+    const losses = form.match(/L+/g) || [];
+    const maxWins = Math.max(...(wins.map(w => w.length)), 0);
+    const maxLosses = Math.max(...(losses.map(l => l.length)), 0);
+    if (maxWins >= 2) return `${maxWins} wins streak`;
+    if (maxLosses >= 2) return `${maxLosses} losses streak`;
+    return 'Inconsistent';
+  };
   
   return {
     homeTeam,
@@ -136,10 +138,11 @@ export const generateMatchPrediction = (homeTeam, awayTeam) => {
     drawProb: drawProb.toFixed(1),
     recommendation,
     confidence: Math.round(confidence),
-    homeForm,
-    awayForm,
-    streak: streak.length > 0 ? `${streak.length} ${streak[0] === 'W' ? 'wins' : 'losses'} in a row` : 'Inconsistent',
-    keyFactor: homeScore > awayScore ? 'Better form' : 'Home advantage',
+    homeForm: actualHomeForm || 'N/A',
+    awayForm: actualAwayForm || 'N/A',
+    homeStreak: getStreak(actualHomeForm),
+    awayStreak: getStreak(actualAwayForm),
+    keyFactor: homeScore > awayScore ? 'Better home form' : (awayScore > homeScore ? 'Strong away form' : 'Evenly matched'),
   };
 };
 
@@ -161,7 +164,7 @@ export const useSportsData = (leagueId = 4328) => {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 120000);
+    const interval = setInterval(fetchData, 180000);
     return () => clearInterval(interval);
   }, [fetchData]);
 
@@ -186,4 +189,21 @@ export const useTeamSearch = () => {
   return { results, loading, search };
 };
 
-export { LEAGUES, MOCK_FORMS };
+export const useLeagueStandings = (leagueId = 4328) => {
+  const [standings, setStandings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStandings = async () => {
+      setLoading(true);
+      const data = await fetchFromAPI('lookuptable.php', { l: leagueId });
+      setStandings(data?.table || []);
+      setLoading(false);
+    };
+    fetchStandings();
+  }, [leagueId]);
+
+  return { standings, loading };
+};
+
+export { LEAGUES };
