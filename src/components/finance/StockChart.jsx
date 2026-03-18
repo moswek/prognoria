@@ -38,15 +38,15 @@ const StockChart = () => {
   const priceChange = quote ? quote['10. change percent'] : '+0.00%';
 
   return (
-    <div className="glass-card p-5 widget-enter">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4">
+    <div className="glass-card p-3 widget-enter flex flex-col h-full overflow-hidden">
+      <div className="flex items-center justify-between mb-2 flex-shrink-0">
+        <div className="flex items-center gap-3">
           <div className="relative">
             <button
               onClick={() => setShowSearch(!showSearch)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
             >
-              <span className="font-display text-lg font-bold text-white">
+              <span className="font-display text-base font-bold text-white">
                 {selectedTicker}
               </span>
               <MagnifyingGlass size={16} className="text-gray-400" />
@@ -90,10 +90,10 @@ const StockChart = () => {
           </div>
 
           <div>
-            <div className="font-mono text-2xl font-bold text-white">
+            <div className="font-mono text-xl font-bold text-white">
               ${formatPrice(currentPrice)}
             </div>
-            <div className={`font-mono text-sm ${priceChange.startsWith('+') ? 'text-accent' : 'text-negative'}`}>
+            <div className={`font-mono text-xs ${priceChange.startsWith('+') ? 'text-accent' : 'text-negative'}`}>
               {priceChange}
             </div>
           </div>
@@ -102,7 +102,7 @@ const StockChart = () => {
         <span className="live-badge">Live</span>
       </div>
 
-      <div className="h-64">
+      <div className="flex-1 min-h-0">
         {loading ? (
           <div className="h-full skeleton rounded-lg" />
         ) : (
@@ -165,28 +165,28 @@ const StockChart = () => {
         )}
       </div>
 
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
-        <div className="flex gap-6">
+      <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5 flex-shrink-0">
+        <div className="flex gap-4">
           <div>
-            <div className="text-xs text-gray-500">Open</div>
-            <div className="font-mono text-sm text-white">
+            <div className="text-[10px] text-gray-500">Open</div>
+            <div className="font-mono text-xs text-white">
               ${displayData.length > 0 ? formatPrice(displayData[displayData.length - 1].open) : '0.00'}
             </div>
           </div>
           <div>
-            <div className="text-xs text-gray-500">High</div>
-            <div className="font-mono text-sm text-white">
+            <div className="text-[10px] text-gray-500">High</div>
+            <div className="font-mono text-xs text-white">
               ${displayData.length > 0 ? formatPrice(displayData[displayData.length - 1].high) : '0.00'}
             </div>
           </div>
           <div>
-            <div className="text-xs text-gray-500">Low</div>
-            <div className="font-mono text-sm text-white">
+            <div className="text-[10px] text-gray-500">Low</div>
+            <div className="font-mono text-xs text-white">
               ${displayData.length > 0 ? formatPrice(displayData[displayData.length - 1].low) : '0.00'}
             </div>
           </div>
         </div>
-        <div className="text-xs text-gray-500">30 Day View</div>
+        <div className="text-[10px] text-gray-500">30 Day</div>
       </div>
     </div>
   );

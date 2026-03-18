@@ -23,9 +23,9 @@ const FinanceWidgets = () => {
         </div>
         
         {widgetCount > 1 && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
             {widgets.finance.stockChart && (
-              <div className="lg:col-span-8">
+              <div className={widgets.finance.trendPredictor || widgets.finance.newsWidget ? "lg:col-span-8" : "lg:col-span-12"}>
                 <StockChart />
               </div>
             )}

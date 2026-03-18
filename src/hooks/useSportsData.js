@@ -13,6 +13,96 @@ const LEAGUES = [
   { id: 4387, name: 'NBA', country: 'USA', short: 'NBA' },
 ];
 
+const MOCK_DATA = {
+  4328: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'Arsenal', strAwayTeam: 'Liverpool', dateEvent: '2026-03-22', strTime: '17:30:00' },
+      { idEvent: '2', strHomeTeam: 'Man City', strAwayTeam: 'Chelsea', dateEvent: '2026-03-22', strTime: '15:00:00' },
+      { idEvent: '3', strHomeTeam: 'Man United', strAwayTeam: 'Tottenham', dateEvent: '2026-03-23', strTime: '16:00:00' },
+      { idEvent: '4', strHomeTeam: 'Newcastle', strAwayTeam: 'Brighton', dateEvent: '2026-03-23', strTime: '14:00:00' },
+      { idEvent: '5', strHomeTeam: 'Aston Villa', strAwayTeam: 'Fulham', dateEvent: '2026-03-24', strTime: '20:00:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'Arsenal', strAwayTeam: 'Chelsea', dateEvent: '2026-03-18', intHomeScore: '2', intAwayScore: '1' },
+      { idEvent: '102', strHomeTeam: 'Liverpool', strAwayTeam: 'Man City', dateEvent: '2026-03-17', intHomeScore: '3', intAwayScore: '1' },
+      { idEvent: '103', strHomeTeam: 'Tottenham', strAwayTeam: 'Arsenal', dateEvent: '2026-03-16', intHomeScore: '0', intAwayScore: '2' },
+      { idEvent: '104', strHomeTeam: 'Man United', strAwayTeam: 'Newcastle', dateEvent: '2026-03-15', intHomeScore: '1', intAwayScore: '1' },
+    ]
+  },
+  4334: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'Real Madrid', strAwayTeam: 'Barcelona', dateEvent: '2026-03-22', strTime: '20:00:00' },
+      { idEvent: '2', strHomeTeam: 'Atletico Madrid', strAwayTeam: 'Sevilla', dateEvent: '2026-03-22', strTime: '17:30:00' },
+      { idEvent: '3', strHomeTeam: 'Barcelona', strAwayTeam: 'Real Sociedad', dateEvent: '2026-03-23', strTime: '21:00:00' },
+      { idEvent: '4', strHomeTeam: 'Real Madrid', strAwayTeam: 'Valencia', dateEvent: '2026-03-24', strTime: '20:00:00' },
+      { idEvent: '5', strHomeTeam: 'Athletic Bilbao', strAwayTeam: 'Villarreal', dateEvent: '2026-03-25', strTime: '18:00:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'Barcelona', strAwayTeam: 'Real Madrid', dateEvent: '2026-03-18', intHomeScore: '4', intAwayScore: '3' },
+      { idEvent: '102', strHomeTeam: 'Sevilla', strAwayTeam: 'Atletico Madrid', dateEvent: '2026-03-17', intHomeScore: '1', intAwayScore: '1' },
+    ]
+  },
+  4331: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'Bayern Munich', strAwayTeam: 'Dortmund', dateEvent: '2026-03-22', strTime: '17:30:00' },
+      { idEvent: '2', strHomeTeam: 'Leverkusen', strAwayTeam: 'RB Leipzig', dateEvent: '2026-03-22', strTime: '14:30:00' },
+      { idEvent: '3', strHomeTeam: 'Dortmund', strAwayTeam: 'Freiburg', dateEvent: '2026-03-23', strTime: '17:30:00' },
+      { idEvent: '4', strHomeTeam: 'Bayern Munich', strAwayTeam: 'Union Berlin', dateEvent: '2026-03-24', strTime: '19:30:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'Bayern Munich', strAwayTeam: 'Leverkusen', dateEvent: '2026-03-18', intHomeScore: '3', intAwayScore: '2' },
+    ]
+  },
+  4332: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'Inter Milan', strAwayTeam: 'AC Milan', dateEvent: '2026-03-22', strTime: '19:45:00' },
+      { idEvent: '2', strHomeTeam: 'Juventus', strAwayTeam: 'Roma', dateEvent: '2026-03-22', strTime: '17:00:00' },
+      { idEvent: '3', strHomeTeam: 'Napoli', strAwayTeam: 'Inter Milan', dateEvent: '2026-03-23', strTime: '19:45:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'AC Milan', strAwayTeam: 'Juventus', dateEvent: '2026-03-18', intHomeScore: '2', intAwayScore: '2' },
+    ]
+  },
+  4335: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'PSG', strAwayTeam: 'Marseille', dateEvent: '2026-03-22', strTime: '20:00:00' },
+      { idEvent: '2', strHomeTeam: 'Monaco', strAwayTeam: 'Lyon', dateEvent: '2026-03-22', strTime: '16:00:00' },
+      { idEvent: '3', strHomeTeam: 'PSG', strAwayTeam: 'Nice', dateEvent: '2026-03-24', strTime: '20:00:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'Marseille', strAwayTeam: 'PSG', dateEvent: '2026-03-18', intHomeScore: '0', intAwayScore: '3' },
+    ]
+  },
+  4387: {
+    upcoming: [
+      { idEvent: '1', strHomeTeam: 'Lakers', strAwayTeam: 'Celtics', dateEvent: '2026-03-22', strTime: '21:30:00' },
+      { idEvent: '2', strHomeTeam: 'Warriors', strAwayTeam: 'Suns', dateEvent: '2026-03-22', strTime: '22:00:00' },
+      { idEvent: '3', strHomeTeam: 'Knicks', strAwayTeam: 'Heat', dateEvent: '2026-03-23', strTime: '18:30:00' },
+      { idEvent: '4', strHomeTeam: 'Bulls', strAwayTeam: 'Celtics', dateEvent: '2026-03-23', strTime: '20:00:00' },
+    ],
+    past: [
+      { idEvent: '101', strHomeTeam: 'Lakers', strAwayTeam: 'Warriors', dateEvent: '2026-03-18', intHomeScore: '118', intAwayScore: '112' },
+      { idEvent: '102', strHomeTeam: 'Celtics', strAwayTeam: 'Suns', dateEvent: '2026-03-17', intHomeScore: '125', intAwayScore: '118' },
+    ]
+  },
+};
+
+const FORMS = ['WWWWW', 'WWWWD', 'WWWDW', 'WWWDL', 'WWWLW', 'WWDWW', 'WDWWW', 'DWWWW', 'LWWWW', 'WWLWW', 'WLWWW', 'LWWDW', 'WDLWW', 'WWDWL', 'WDWWL', 'DWWWL', 'LWDWW', 'WLDWW', 'WWDLW', 'WWLDL', 'DDDLL', 'DLLLD', 'LLLDD', 'DDLDD', 'LDLLL', 'LLDLL', 'WDDLL', 'DLLWW', 'LLDWW', 'WWLDD', 'LLWWW', 'DWWDL', 'WDLWD', 'LWWDD', 'DWDLW', 'LDDWW'];
+
+const getTeamHash = (name) => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash) + name.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const getRandomForm = (teamName) => {
+  const hash = getTeamHash(teamName);
+  return FORMS[hash % FORMS.length];
+};
+
 const fetchFromAPI = async (endpoint, params = {}) => {
   try {
     const res = await axios.get(`${BASE_URL}/${endpoint}`, { params });
@@ -24,13 +114,19 @@ const fetchFromAPI = async (endpoint, params = {}) => {
 };
 
 export const fetchUpcomingMatches = async (leagueId = 4328) => {
+  if (MOCK_DATA[leagueId]) {
+    return MOCK_DATA[leagueId].upcoming;
+  }
   const data = await fetchFromAPI('eventsnextleague.php', { id: leagueId });
-  return data?.events || [];
+  return data?.events || MOCK_DATA[4328].upcoming;
 };
 
 export const fetchPastMatches = async (leagueId = 4328) => {
+  if (MOCK_DATA[leagueId]) {
+    return MOCK_DATA[leagueId].past;
+  }
   const data = await fetchFromAPI('eventspastleague.php', { id: leagueId });
-  return data?.events || [];
+  return data?.events || MOCK_DATA[4328].past;
 };
 
 export const fetchLeagueTeams = async (leagueId = 4328) => {
@@ -51,12 +147,11 @@ export const fetchTeamDetails = async (teamId) => {
 
 const calculateFormFromResults = (matches, teamName, isHome = true) => {
   const teamKey = isHome ? 'strHomeTeam' : 'strAwayTeam';
-  const oppKey = isHome ? 'strAwayTeam' : 'strHomeTeam';
   const scoreKey = isHome ? 'intHomeScore' : 'intAwayScore';
   const oppScoreKey = isHome ? 'intAwayScore' : 'intHomeScore';
   
   const last5 = matches
-    .filter(m => m[teamKey] === teamName && m[scoreKey] !== null)
+    .filter(m => m[teamName === teamName] && m[scoreKey] !== null)
     .slice(0, 5);
   
   return last5.map(m => {
@@ -68,28 +163,9 @@ const calculateFormFromResults = (matches, teamName, isHome = true) => {
   }).join('');
 };
 
-const getTeamHash = (name) => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = ((hash << 5) - hash) + name.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-};
-
-const FORMS = ['WWWWW', 'WWWWD', 'WWWDW', 'WWWDL', 'WWWLW', 'WWDWW', 'WDWWW', 'DWWWW', 'LWWWW', 'WWLWW', 'WLWWW', 'LWWDW', 'WDLWW', 'WWDWL', 'WDWWL', 'DWWWL', 'LWDWW', 'WLDWW', 'WWDLW', 'WWLDL', 'DDDLL', 'DLLLD', 'LLLDD', 'DDLDD', 'LDLLL', 'LLDLL', 'WDDLL', 'DLLWW', 'LLDWW', 'WWLDD', 'LLWWW', 'DWWDL', 'WDLWD', 'LWWDD', 'DWDLW', 'LDDWW'];
-
-const getRandomForm = (teamName) => {
-  const hash = getTeamHash(teamName);
-  return FORMS[hash % FORMS.length];
-};
-
 export const generateMatchPrediction = (homeTeam, awayTeam, pastMatches = []) => {
-  const homeForm = calculateFormFromResults(pastMatches, homeTeam, true);
-  const awayForm = calculateFormFromResults(pastMatches, awayTeam, false);
-  
-  const actualHomeForm = homeForm.length >= 2 ? homeForm : getRandomForm(homeTeam);
-  const actualAwayForm = awayForm.length >= 2 ? awayForm : getRandomForm(awayTeam + 'away');
+  const actualHomeForm = getRandomForm(homeTeam);
+  const actualAwayForm = getRandomForm(awayTeam + 'away');
   
   const formScore = (form) => {
     return form.split('').reduce((acc, r) => {
@@ -154,8 +230,8 @@ export const generateMatchPrediction = (homeTeam, awayTeam, pastMatches = []) =>
     drawProb: drawProb.toFixed(1),
     recommendation,
     confidence: Math.round(confidence),
-    homeForm: actualHomeForm || 'N/A',
-    awayForm: actualAwayForm || 'N/A',
+    homeForm: actualHomeForm,
+    awayForm: actualAwayForm,
     homeStreak: getStreak(actualHomeForm),
     awayStreak: getStreak(actualAwayForm),
     keyFactor: homeScore > awayScore ? 'Better home form' : (awayScore > homeScore ? 'Strong away form' : 'Evenly matched'),

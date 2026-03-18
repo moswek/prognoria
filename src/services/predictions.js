@@ -159,9 +159,6 @@ const generateSignal = (quote, historical) => {
   }
   
   return {
-    symbol: '',
-    name: '',
-    sector: '',
     price: currentPrice,
     change,
     changePercent,
