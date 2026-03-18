@@ -101,55 +101,55 @@ const generateSignal = (quote, historical) => {
     action = 'Strong Buy';
     entryZone = currentPrice;
     exitTarget = currentPrice * 1.08;
-    holdTime = '2-4 weeks';
+    holdTime = '2-4 hours';
     reason.push(`RSI oversold (${rsi.toFixed(1)})`);
   } else if (rsi < 40) {
     signal = 'BUY';
     confidence = 70;
     action = 'Buy';
     entryZone = currentPrice * 0.98;
-    exitTarget = currentPrice * 1.05;
-    holdTime = '1-3 weeks';
+    exitTarget = currentPrice * 1.02;
+    holdTime = '1-3 hours';
     reason.push(`RSI slightly oversold (${rsi.toFixed(1)})`);
   } else if (rsi > 70) {
     signal = 'STRONG_SELL';
     confidence = 85;
     action = 'Strong Sell';
     entryZone = currentPrice;
-    exitTarget = currentPrice * 0.92;
-    holdTime = '2-4 weeks';
+    exitTarget = currentPrice * 0.96;
+    holdTime = '2-4 hours';
     reason.push(`RSI overbought (${rsi.toFixed(1)})`);
   } else if (rsi > 60) {
     signal = 'SELL';
     confidence = 70;
     action = 'Sell';
     entryZone = currentPrice * 1.02;
-    exitTarget = currentPrice * 0.95;
-    holdTime = '1-2 weeks';
+    exitTarget = currentPrice * 0.98;
+    holdTime = '1-2 hours';
     reason.push(`RSI slightly overbought (${rsi.toFixed(1)})`);
   } else if (trend === 'bullish' && changePercent > 0) {
     signal = 'BUY';
     confidence = 65;
     action = 'Buy';
     entryZone = currentPrice;
-    exitTarget = currentPrice * 1.04;
-    holdTime = '1-2 weeks';
+    exitTarget = currentPrice * 1.02;
+    holdTime = '1-2 hours';
     reason.push('Bullish trend confirmed');
   } else if (trend === 'bearish' && changePercent < 0) {
     signal = 'SELL';
     confidence = 65;
     action = 'Sell';
     entryZone = currentPrice;
-    exitTarget = currentPrice * 0.96;
-    holdTime = '1 week';
+    exitTarget = currentPrice * 0.98;
+    holdTime = '1-2 hours';
     reason.push('Bearish trend detected');
   } else {
     signal = 'HOLD';
     confidence = 50;
     action = 'Hold';
     entryZone = currentPrice;
-    exitTarget = currentPrice * 1.02;
-    holdTime = '1-2 weeks';
+    exitTarget = currentPrice * 1.01;
+    holdTime = '1-4 hours';
     reason.push('Neutral - wait for signal');
   }
   
@@ -167,7 +167,7 @@ const generateSignal = (quote, historical) => {
     action,
     entryZone: entryZone.toFixed(2),
     exitTarget: exitTarget.toFixed(2),
-    stopLoss: (currentPrice * (signal.includes('BUY') ? 0.97 : 1.03)).toFixed(2),
+    stopLoss: (currentPrice * (signal.includes('BUY') ? 0.995 : 1.005)).toFixed(2),
     holdTime,
     risk: changePercent > 0 ? 'Low' : changePercent < -2 ? 'High' : 'Medium',
     reason: reason.join(' | '),

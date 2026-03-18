@@ -31,7 +31,7 @@ const StockChart = () => {
 
   const displayData = timeSeries.slice(-30).map((item) => ({
     ...item,
-    formattedDate: format(parseISO(item.date), 'MMM dd'),
+    formattedDate: format(parseISO(item.date), 'HH:mm'),
   }));
 
   const currentPrice = quote ? parseFloat(quote['05. price']) : displayData[displayData.length - 1]?.close;
@@ -186,7 +186,7 @@ const StockChart = () => {
             </div>
           </div>
         </div>
-        <div className="text-[10px] text-gray-500">30 Day</div>
+        <div className="text-[10px] text-gray-500">4H Timeframe</div>
       </div>
     </div>
   );

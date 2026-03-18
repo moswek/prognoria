@@ -42,7 +42,10 @@ const TrendPredictor = () => {
         <h3 className="font-display text-sm font-bold text-white">
           Trend Predictor
         </h3>
-        <span className="text-xs text-gray-500 font-mono">{selectedTicker}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-accent font-mono">4H</span>
+          <span className="text-xs text-gray-500 font-mono">{selectedTicker}</span>
+        </div>
       </div>
 
       {loading ? (

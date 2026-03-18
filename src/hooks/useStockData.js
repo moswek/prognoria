@@ -15,10 +15,10 @@ const MOCK_QUOTES = {
 const generateMockTimeSeries = () => {
   return Array.from({ length: 30 }, (_, i) => {
     const date = new Date();
-    date.setDate(date.getDate() - (29 - i));
+    date.setHours(date.getHours() - (29 - i) * 4);
     const basePrice = 170 + Math.sin(i * 0.3) * 15 + Math.random() * 5;
     return {
-      date: date.toISOString().split('T')[0],
+      date: date.toISOString(),
       open: basePrice - Math.random() * 2,
       high: basePrice + Math.random() * 3,
       low: basePrice - Math.random() * 3,

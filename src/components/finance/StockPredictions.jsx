@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowUp, ArrowDown, Clock, Warning, ChartLine, Bell } from '@phosphor-icons/react';
 import { fetchAllPredictions, DEFAULT_STOCKS } from '../../services/predictions';
 import useDashboardStore from '../../store/dashboardStore';
@@ -86,26 +86,29 @@ const StockPredictions = () => {
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const alertedRef = useRef(new Set());
   const { setSelectedTicker, addAlert } = useDashboardStore();
 
   const fetchPredictions = async () => {
     try {
       const data = await fetchAllPredictions();
       
-      if (predictions.length > 0) {
-        const newSignals = data.filter(d => 
-          predictions.some(p => p.symbol === d.symbol && p.signal !== d.signal)
-        );
-        
-        newSignals.forEach(stock => {
+      const buyOrSellSignals = data.filter(d => 
+        (d.signal.includes('BUY') || d.signal.includes('SELL'))
+      );
+      
+      buyOrSellSignals.forEach(stock => {
+        const alertKey = `${stock.symbol}-${stock.signal}`;
+        if (!alertedRef.current.has(alertKey)) {
+          alertedRef.current.add(alertKey);
           addAlert({
             type: 'price',
             title: `${stock.signal.replace('_', ' ')} Signal`,
             message: `${stock.symbol} at $${stock.price.toFixed(2)} - ${stock.action}`,
             symbol: stock.symbol,
           });
-        });
-      }
+        }
+      });
       
       setPredictions(data);
       setLastUpdate(new Date());
