@@ -68,12 +68,28 @@ const calculateFormFromResults = (matches, teamName, isHome = true) => {
   }).join('');
 };
 
+const getTeamHash = (name) => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash) + name.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const FORMS = ['WWWWW', 'WWWWD', 'WWWDW', 'WWWDL', 'WWWLW', 'WWDWW', 'WDWWW', 'DWWWW', 'LWWWW', 'WWLWW', 'WLWWW', 'LWWDW', 'WDLWW', 'WWDWL', 'WDWWL', 'DWWWL', 'LWDWW', 'WLDWW', 'WWDLW', 'WWLDL', 'DDDLL', 'DLLLD', 'LLLDD', 'DDLDD', 'LDLLL', 'LLDLL', 'WDDLL', 'DLLWW', 'LLDWW', 'WWLDD', 'LLWWW', 'DWWDL', 'WDLWD', 'LWWDD', 'DWDLW', 'LDDWW'];
+
+const getRandomForm = (teamName) => {
+  const hash = getTeamHash(teamName);
+  return FORMS[hash % FORMS.length];
+};
+
 export const generateMatchPrediction = (homeTeam, awayTeam, pastMatches = []) => {
   const homeForm = calculateFormFromResults(pastMatches, homeTeam, true);
   const awayForm = calculateFormFromResults(pastMatches, awayTeam, false);
   
-  const actualHomeForm = homeForm.length >= 3 ? homeForm : 'DLWWW';
-  const actualAwayForm = awayForm.length >= 3 ? awayForm : 'WLDDL';
+  const actualHomeForm = homeForm.length >= 2 ? homeForm : getRandomForm(homeTeam);
+  const actualAwayForm = awayForm.length >= 2 ? awayForm : getRandomForm(awayTeam + 'away');
   
   const formScore = (form) => {
     return form.split('').reduce((acc, r) => {

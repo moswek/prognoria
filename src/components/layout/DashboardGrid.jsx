@@ -103,13 +103,13 @@ const SportsWidgets = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {widgets.sports.matchPredictor && (
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-8">
           <SportsPredictions />
         </div>
       )}
       
       {widgets.sports.formTable && (
-        <div className={widgets.sports.matchPredictor ? 'lg:col-span-6' : 'lg:col-span-12'}>
+        <div className={widgets.sports.matchPredictor ? 'lg:col-span-4' : 'lg:col-span-12'}>
           <FormTable />
         </div>
       )}
