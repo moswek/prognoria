@@ -1,5 +1,6 @@
-import { useSportsData, LEAGUES, generateMatchPrediction } from '../../hooks/useSportsData';
-import { Trophy, ArrowUp, ArrowDown } from '@phosphor-icons/react';
+import { useState, useMemo } from 'react';
+import { useSportsData, LEAGUES } from '../../hooks/useSportsData';
+import { Trophy } from '@phosphor-icons/react';
 
 const FormDot = ({ result }) => {
   const colors = {
