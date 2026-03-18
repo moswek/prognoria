@@ -4,8 +4,7 @@ import StockChart from '../finance/StockChart';
 import TrendPredictor from '../finance/TrendPredictor';
 import WatchlistTable from '../finance/WatchlistTable';
 import NewsWidget from '../finance/NewsWidget';
-import MatchPredictor from '../sports/MatchPredictor';
-import FormTable from '../sports/FormTable';
+import SportsPredictions from '../sports/SportsPredictions';
 import LiveScores from '../sports/LiveScores';
 
 const FinanceWidgets = () => {
@@ -106,37 +105,19 @@ const FinanceWidgets = () => {
 
 const SportsWidgets = () => {
   const { widgets } = useDashboardStore();
-  const activeWidgets = Object.entries(widgets.sports).filter(([_, active]) => active).map(([key]) => key);
-  const widgetCount = activeWidgets.length;
 
-  if (widgetCount === 0) return null;
-
-  if (widgetCount === 1) {
-    return (
-      <div className="grid grid-cols-1 gap-4">
-        {widgets.sports.matchPredictor && <MatchPredictor />}
-        {widgets.sports.formTable && <FormTable />}
-        {widgets.sports.liveScores && <LiveScores />}
-      </div>
-    );
-  }
+  if (!widgets.sports.matchPredictor && !widgets.sports.liveScores) return null;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {widgets.sports.matchPredictor && (
-        <div className="lg:col-span-5">
-          <MatchPredictor />
-        </div>
-      )}
-      
-      {widgets.sports.formTable && (
-        <div className="lg:col-span-7">
-          <FormTable />
+        <div className="lg:col-span-6">
+          <SportsPredictions />
         </div>
       )}
       
       {widgets.sports.liveScores && (
-        <div className="lg:col-span-12">
+        <div className={widgets.sports.matchPredictor ? 'lg:col-span-6' : 'lg:col-span-12'}>
           <LiveScores />
         </div>
       )}

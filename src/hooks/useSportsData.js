@@ -1,211 +1,189 @@
 import { useState, useEffect, useCallback } from 'react';
-import {
-  fetchUpcomingEvents,
-  fetchPastEvents,
-  fetchLiveScores,
-  fetchTeamForm,
-  LEAGUE_IDS,
-} from '../services/sportsDB';
+import axios from 'axios';
 
-const MOCK_UPCOMING_EVENTS = [
-  {
-    idEvent: '1',
-    strEvent: 'Manchester United vs Liverpool',
-    strHomeTeam: 'Manchester United',
-    strAwayTeam: 'Liverpool',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    strTime: '15:00:00',
-    strThumb: null,
-  },
-  {
-    idEvent: '2',
-    strEvent: 'Arsenal vs Chelsea',
-    strHomeTeam: 'Arsenal',
-    strAwayTeam: 'Chelsea',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() + 172800000).toISOString().split('T')[0],
-    strTime: '17:30:00',
-    strThumb: null,
-  },
-  {
-    idEvent: '3',
-    strEvent: 'Tottenham vs Newcastle',
-    strHomeTeam: 'Tottenham',
-    strAwayTeam: 'Newcastle',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() + 259200000).toISOString().split('T')[0],
-    strTime: '14:00:00',
-    strThumb: null,
-  },
-  {
-    idEvent: '4',
-    strEvent: 'LA Lakers vs Boston Celtics',
-    strHomeTeam: 'LA Lakers',
-    strAwayTeam: 'Boston Celtics',
-    strLeague: 'NBA',
-    dateEvent: new Date(Date.now() + 43200000).toISOString().split('T')[0],
-    strTime: '21:30:00',
-    strThumb: null,
-  },
-  {
-    idEvent: '5',
-    strEvent: 'GS Warriors vs Phoenix Suns',
-    strHomeTeam: 'GS Warriors',
-    strAwayTeam: 'Phoenix Suns',
-    strLeague: 'NBA',
-    dateEvent: new Date(Date.now() + 129600000).toISOString().split('T')[0],
-    strTime: '22:00:00',
-    strThumb: null,
-  },
+const SPORTS_DB_KEY = '3';
+const BASE_URL = `https://www.thesportsdb.com/api/v1/json/${SPORTS_DB_KEY}`;
+
+const LEAGUES = [
+  { id: 4328, name: 'Premier League', country: 'England' },
+  { id: 4334, name: 'La Liga', country: 'Spain' },
+  { id: 4331, name: 'Bundesliga', country: 'Germany' },
+  { id: 4332, name: 'Serie A', country: 'Italy' },
+  { id: 4335, name: 'Ligue 1', country: 'France' },
+  { id: 4387, name: 'NBA', country: 'USA' },
 ];
 
-const MOCK_PAST_EVENTS = [
-  {
-    idEvent: '101',
-    strEvent: 'Manchester City vs Aston Villa',
-    strHomeTeam: 'Manchester City',
-    strAwayTeam: 'Aston Villa',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    intHomeScore: '3',
-    intAwayScore: '1',
-    strThumb: null,
-  },
-  {
-    idEvent: '102',
-    strEvent: 'Chelsea vs Tottenham',
-    strHomeTeam: 'Chelsea',
-    strAwayTeam: 'Tottenham',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() - 172800000).toISOString().split('T')[0],
-    intHomeScore: '2',
-    intAwayScore: '2',
-    strThumb: null,
-  },
-  {
-    idEvent: '103',
-    strEvent: 'Miami Heat vs NY Knicks',
-    strHomeTeam: 'Miami Heat',
-    strAwayTeam: 'NY Knicks',
-    strLeague: 'NBA',
-    dateEvent: new Date(Date.now() - 43200000).toISOString().split('T')[0],
-    intHomeScore: '118',
-    intAwayScore: '112',
-    strThumb: null,
-  },
-  {
-    idEvent: '104',
-    strEvent: 'Liverpool vs Everton',
-    strHomeTeam: 'Liverpool',
-    strAwayTeam: 'Everton',
-    strLeague: 'Premier League',
-    dateEvent: new Date(Date.now() - 259200000).toISOString().split('T')[0],
-    intHomeScore: '2',
-    intAwayScore: '0',
-    strThumb: null,
-  },
+const MOCK_UPCOMING = [
+  { idEvent: '1', strHomeTeam: 'Man City', strAwayTeam: 'Liverpool', strLeague: 'Premier League', dateEvent: '2026-03-22', strTime: '17:30', strHomeTeamBadge: '', strAwayTeamBadge: '' },
+  { idEvent: '2', strHomeTeam: 'Arsenal', strAwayTeam: 'Chelsea', strLeague: 'Premier League', dateEvent: '2026-03-23', strTime: '16:00', strHomeTeamBadge: '', strAwayTeamBadge: '' },
+  { idEvent: '3', strHomeTeam: 'Real Madrid', strAwayTeam: 'Barcelona', strLeague: 'La Liga', dateEvent: '2026-03-23', strTime: '20:00', strHomeTeamBadge: '', strAwayTeamBadge: '' },
+  { idEvent: '4', strHomeTeam: 'Bayern Munich', strAwayTeam: 'Dortmund', strLeague: 'Bundesliga', dateEvent: '2026-03-22', strTime: '17:30', strHomeTeamBadge: '', strAwayTeamBadge: '' },
 ];
 
-const MOCK_TEAM_FORMS = {
-  'Manchester United': 'WDLWW',
+const MOCK_PAST = [
+  { idEvent: '101', strHomeTeam: 'Man United', strAwayTeam: 'Tottenham', strLeague: 'Premier League', dateEvent: '2026-03-18', intHomeScore: '2', intAwayScore: '1' },
+  { idEvent: '102', strHomeTeam: 'PSG', strAwayTeam: 'Marseille', strLeague: 'Ligue 1', dateEvent: '2026-03-17', intHomeScore: '3', intAwayScore: '0' },
+  { idEvent: '103', strHomeTeam: 'Lakers', strAwayTeam: 'Celtics', strLeague: 'NBA', dateEvent: '2026-03-18', intHomeScore: '118', intAwayScore: '112' },
+];
+
+const MOCK_FORMS = {
+  'Man City': 'WWWWD',
   'Liverpool': 'WWWDW',
   'Arsenal': 'WDWWW',
   'Chelsea': 'LLDLW',
   'Tottenham': 'WLWDL',
-  'Newcastle': 'DWWLW',
-  'LA Lakers': 'WLWWW',
-  'Boston Celtics': 'WWLWW',
-  'GS Warriors': 'LWWLW',
-  'Phoenix Suns': 'WLLWW',
-  'Manchester City': 'WWWWW',
-  'Aston Villa': 'DLWDW',
-  'Everton': 'LLDLL',
-  'Miami Heat': 'WLWWL',
-  'NY Knicks': 'LWWLW',
+  'Man United': 'WLDWW',
+  'Real Madrid': 'WWWWW',
+  'Barcelona': 'WDWWW',
+  'Bayern Munich': 'WWWDW',
+  'Dortmund': 'WLWDL',
 };
 
-export const useSportsData = (leagueId = LEAGUE_IDS.EPL, autoRefresh = false) => {
-  const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [pastEvents, setPastEvents] = useState([]);
+const fetchFromAPI = async (endpoint, params = {}) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/${endpoint}`, { params });
+    return res.data;
+  } catch (e) {
+    console.warn(`API error: ${endpoint}`, e.message);
+    return null;
+  }
+};
+
+export const fetchUpcomingMatches = async (leagueId = 4328) => {
+  const data = await fetchFromAPI('eventsnextleague.php', { id: leagueId });
+  if (data?.events) return data.events.slice(0, 10);
+  return MOCK_UPCOMING;
+};
+
+export const fetchPastMatches = async (leagueId = 4328) => {
+  const data = await fetchFromAPI('eventspastleague.php', { id: leagueId });
+  if (data?.events) return data.events.slice(0, 10);
+  return MOCK_PAST;
+};
+
+export const fetchLeagueTeams = async (leagueId = 4328) => {
+  const data = await fetchFromAPI('lookup_all_teams.php', { id: leagueId });
+  return data?.teams || [];
+};
+
+export const searchTeams = async (query) => {
+  if (!query || query.length < 2) return [];
+  const data = await fetchFromAPI('searchteams.php', { t: query });
+  return data?.teams || [];
+};
+
+export const fetchTeamDetails = async (teamId) => {
+  const data = await fetchFromAPI('lookupteam.php', { id: teamId });
+  return data?.teams?.[0] || null;
+};
+
+export const fetchTeamLastMatches = async (teamId) => {
+  const data = await fetchFromAPI('eventslast.php', { teamId });
+  return data?.results || [];
+};
+
+export const generateMatchPrediction = (homeTeam, awayTeam) => {
+  const homeForm = MOCK_FORMS[homeTeam] || 'DLWLW';
+  const awayForm = MOCK_FORMS[awayTeam] || 'DLWLW';
+  
+  const formScore = (form) => {
+    return form.split('').reduce((acc, r) => {
+      if (r === 'W') return acc + 3;
+      if (r === 'D') return acc + 1;
+      return acc;
+    }, 0);
+  };
+  
+  const homeScore = formScore(homeForm);
+  const awayScore = formScore(awayForm);
+  const total = homeScore + awayScore + 1;
+  
+  let homeProb = (homeScore / total) * 100;
+  let awayProb = (awayScore / total) * 100;
+  let drawProb = 100 - homeProb - awayProb;
+  
+  homeProb = Math.max(20, Math.min(70, homeProb + 15));
+  awayProb = Math.max(15, Math.min(60, awayProb + 10));
+  drawProb = Math.max(10, 100 - homeProb - awayProb);
+  
+  const sum = homeProb + awayProb + drawProb;
+  homeProb = (homeProb / sum) * 100;
+  awayProb = (awayProb / sum) * 100;
+  drawProb = (drawProb / sum) * 100;
+  
+  let recommendation = 'BET_DRAW';
+  let confidence = 50;
+  
+  if (homeProb > awayProb + 15) {
+    recommendation = 'BET_HOME';
+    confidence = Math.min(85, 60 + (homeProb - awayProb) / 2);
+  } else if (awayProb > homeProb + 15) {
+    recommendation = 'BET_AWAY';
+    confidence = Math.min(85, 60 + (awayProb - homeProb) / 2);
+  } else if (drawProb > 30) {
+    recommendation = 'BET_DRAW';
+    confidence = 55 + drawProb / 3;
+  }
+  
+  const recentForm = homeScore > awayScore ? homeForm : awayForm;
+  const streak = recentForm.match(/W{2,}|L{2,}/)?.[0] || '';
+  
+  return {
+    homeTeam,
+    awayTeam,
+    homeProb: homeProb.toFixed(1),
+    awayProb: awayProb.toFixed(1),
+    drawProb: drawProb.toFixed(1),
+    recommendation,
+    confidence: Math.round(confidence),
+    homeForm,
+    awayForm,
+    streak: streak.length > 0 ? `${streak.length} ${streak[0] === 'W' ? 'wins' : 'losses'} in a row` : 'Inconsistent',
+    keyFactor: homeScore > awayScore ? 'Better form' : 'Home advantage',
+  };
+};
+
+export const useSportsData = (leagueId = 4328) => {
+  const [upcoming, setUpcoming] = useState([]);
+  const [past, setPast] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    setError(null);
-
-    try {
-      const [upcoming, past] = await Promise.all([
-        fetchUpcomingEvents(leagueId),
-        fetchPastEvents(leagueId),
-      ]);
-
-      setUpcomingEvents(upcoming.length > 0 ? upcoming.slice(0, 5) : MOCK_UPCOMING_EVENTS);
-      setPastEvents(past.length > 0 ? past.slice(0, 5) : MOCK_PAST_EVENTS);
-    } catch (err) {
-      console.warn('Using mock sports data:', err.message);
-      setUpcomingEvents(MOCK_UPCOMING_EVENTS);
-      setPastEvents(MOCK_PAST_EVENTS);
-    } finally {
-      setLoading(false);
-    }
+    const [up, pa] = await Promise.all([
+      fetchUpcomingMatches(leagueId),
+      fetchPastMatches(leagueId),
+    ]);
+    setUpcoming(up);
+    setPast(pa);
+    setLoading(false);
   }, [leagueId]);
 
   useEffect(() => {
     fetchData();
+    const interval = setInterval(fetchData, 120000);
+    return () => clearInterval(interval);
   }, [fetchData]);
 
-  useEffect(() => {
-    if (autoRefresh) {
-      const interval = setInterval(fetchData, 300000);
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, fetchData]);
-
-  return { upcomingEvents, pastEvents, loading, error, refetch: fetchData };
+  return { upcoming, past, loading, refetch: fetchData };
 };
 
-export const useLiveScores = () => {
-  const [liveEvents, setLiveEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLive = async () => {
-      setLoading(true);
-      try {
-        const live = await fetchLiveScores();
-        setLiveEvents(live.slice(0, 10));
-      } catch {
-        setLiveEvents(MOCK_PAST_EVENTS.filter(e => e.intHomeScore));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLive();
-    const interval = setInterval(fetchLive, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return { liveEvents, loading };
-};
-
-export const useTeamForm = (teamName) => {
-  const [form, setForm] = useState([]);
+export const useTeamSearch = () => {
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!teamName) {
-      setForm([]);
+  const search = useCallback(async (query) => {
+    if (!query || query.length < 2) {
+      setResults([]);
       return;
     }
+    setLoading(true);
+    const teams = await searchTeams(query);
+    setResults(teams.slice(0, 8));
+    setLoading(false);
+  }, []);
 
-    const mockForm = MOCK_TEAM_FORMS[teamName] || 'DLWLW';
-    setForm(mockForm.split(''));
-  }, [teamName]);
-
-  return { form, loading };
+  return { results, loading, search };
 };
 
-export { LEAGUE_IDS };
+export { LEAGUES, MOCK_FORMS };
