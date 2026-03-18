@@ -6,9 +6,6 @@ import WatchlistTable from '../finance/WatchlistTable';
 import NewsWidget from '../finance/NewsWidget';
 import MarketTicker from '../finance/MarketTicker';
 import TradeSimulator from '../finance/TradeSimulator';
-import SportsPredictions from '../sports/SportsPredictions';
-import FormTable from '../sports/FormTable';
-import LiveScores from '../sports/LiveScores';
 
 const FinanceWidgets = () => {
   const { widgets, selectedTicker } = useDashboardStore();
@@ -25,7 +22,7 @@ const FinanceWidgets = () => {
         </div>
         
         {widgets.finance.tradeSimulator && (
-          <div className="lg:col-span-12">
+          <div>
             <TradeSimulator />
           </div>
         )}
@@ -64,7 +61,7 @@ const FinanceWidgets = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {widgets.finance.stockChart && (
-        <div className="lg:col-span-8">
+        <div className={widgets.finance.trendPredictor ? "lg:col-span-8" : "lg:col-span-12"}>
           <StockChart />
         </div>
       )}
@@ -101,36 +98,6 @@ const FinanceWidgets = () => {
   );
 };
 
-const SportsWidgets = () => {
-  const { widgets } = useDashboardStore();
-
-  if (!widgets.sports.matchPredictor && !widgets.sports.formTable && !widgets.sports.liveScores) {
-    return null;
-  }
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-      {widgets.sports.matchPredictor && (
-        <div className="lg:col-span-8">
-          <SportsPredictions />
-        </div>
-      )}
-      
-      {widgets.sports.formTable && (
-        <div className={widgets.sports.matchPredictor ? 'lg:col-span-4' : 'lg:col-span-12'}>
-          <FormTable />
-        </div>
-      )}
-      
-      {widgets.sports.liveScores && (
-        <div className="lg:col-span-12">
-          <LiveScores />
-        </div>
-      )}
-    </div>
-  );
-};
-
 const DashboardGrid = () => {
   const { sectors, widgets } = useDashboardStore();
 
@@ -153,19 +120,7 @@ const DashboardGrid = () => {
         </section>
       )}
 
-      {sectors.sports && (
-        <section>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-1 h-6 bg-blue-500 rounded-full" />
-            <h2 className="font-display text-xl font-bold text-white">
-              Sports
-            </h2>
-          </div>
-          <SportsWidgets />
-        </section>
-      )}
-
-      {!sectors.finance && !sectors.sports && (
+      {!sectors.finance && (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
             <span className="text-3xl">0</span>

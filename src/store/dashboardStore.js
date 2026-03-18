@@ -8,11 +8,6 @@ const defaultLayout = {
     { i: 'newsWidget', x: 8, y: 2, w: 4, h: 3 },
     { i: 'trendPredictor', x: 8, y: 5, w: 4, h: 3 },
   ],
-  sports: [
-    { i: 'matchPredictor', x: 0, y: 0, w: 8, h: 2 },
-    { i: 'formTable', x: 8, y: 0, w: 4, h: 2 },
-    { i: 'liveScores', x: 0, y: 2, w: 12, h: 2 },
-  ],
 };
 
 const useDashboardStore = create(
@@ -20,7 +15,6 @@ const useDashboardStore = create(
     (set, get) => ({
       sectors: {
         finance: true,
-        sports: true,
       },
       
       widgets: {
@@ -32,11 +26,6 @@ const useDashboardStore = create(
           newsWidget: true,
           marketTicker: true,
           tradeSimulator: true,
-        },
-        sports: {
-          matchPredictor: true,
-          formTable: true,
-          liveScores: true,
         },
       },
       

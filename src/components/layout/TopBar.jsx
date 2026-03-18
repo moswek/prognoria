@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
-import { ChartLine, Trophy, Gear } from '@phosphor-icons/react';
+import { ChartLine, Gear } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 import useDashboardStore from '../../store/dashboardStore';
 import AlertPanel from './AlertPanel';
 
 const TopBar = () => {
   const [time, setTime] = useState(new Date());
-  const { sectors, getActiveWidgetCount } = useDashboardStore();
+  const { getActiveWidgetCount } = useDashboardStore();
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const activeSectors = Object.entries(sectors)
-    .filter(([_, active]) => active)
-    .map(([sector]) => sector);
 
   return (
     <header className="h-16 bg-card border-b border-white/5 flex items-center justify-between px-6">
@@ -28,20 +24,10 @@ const TopBar = () => {
           </span>
         </h1>
         <div className="h-6 w-px bg-white/10" />
-        <div className="flex items-center gap-2">
-          {sectors.finance && (
-            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-accent/10 rounded-full text-xs font-medium text-accent">
-              <ChartLine size={12} weight="fill" />
-              Finance
-            </span>
-          )}
-          {sectors.sports && (
-            <span className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-full text-xs font-medium text-blue-400">
-              <Trophy size={12} weight="fill" />
-              Sports
-            </span>
-          )}
-        </div>
+        <span className="flex items-center gap-1.5 px-2.5 py-1 bg-accent/10 rounded-full text-xs font-medium text-accent">
+          <ChartLine size={12} weight="fill" />
+          Finance
+        </span>
       </div>
 
       <div className="flex items-center gap-6">

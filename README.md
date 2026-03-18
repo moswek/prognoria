@@ -1,6 +1,6 @@
 # PROGNORIA
 
-A professional predictive analytics dashboard combining Finance (Stock Markets) and Sports prediction widgets. Built with React, Vite, and Tailwind CSS.
+A professional predictive analytics dashboard for Finance and Stock Market trading. Built with React, Vite, and Tailwind CSS.
 
 ![Prognoria](https://img.shields.io/badge/Prognoria-Predictive%20Analytics-00ff9d?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react)
@@ -8,25 +8,28 @@ A professional predictive analytics dashboard combining Finance (Stock Markets) 
 
 ## Features
 
-### Finance Dashboard
-- **Stock Signals** - Real-time buy/sell/hold recommendations for 12 major stocks using Finnhub API
-- **Stock Chart** - Interactive 30-day price charts with search functionality
-- **Trend Predictor** - Technical analysis with RSI, momentum, support/resistance levels
-- **News Widget** - Latest market news for selected ticker
-- **Watchlist** - Track your favorite stocks
+### Stock Signals
+- Real-time buy/sell/hold recommendations for major stocks
+- Entry zones, exit targets, and stop loss levels
+- Risk assessment and confidence scores
+- Quick trade execution from signals
 
-### Sports Dashboard
-- **Match Predictions** - AI-generated predictions for upcoming football/soccer matches
-- **Form Table** - League standings with team form indicators
-- **Live Scores** - Real-time match score updates
+### Market Ticker
+- Live scrolling display of global stock exchange times
+- NYSE, LSE, TSE, HKEX, SSE, FWB, ASX, SGX
+- Real-time open/closed status based on market hours
 
-### Supported Leagues
-- Premier League (EPL)
-- La Liga
-- Bundesliga
-- Serie A
-- Ligue 1
-- NBA
+### Trading Simulator
+- Virtual trading with customizable capital
+- Track open positions and trade history
+- Win rate and P&L analysis
+- Position sizing based on signal recommendations
+
+### Additional Widgets
+- **Stock Chart** - Interactive 4-hour timeframe charts with search
+- **Trend Predictor** - Technical analysis (RSI, momentum, support/resistance)
+- **News Widget** - Latest market news
+- **Watchlist** - Track favorite stocks
 
 ## Tech Stack
 
@@ -35,7 +38,7 @@ A professional predictive analytics dashboard combining Finance (Stock Markets) 
 - **State Management**: Zustand
 - **Charts**: Recharts
 - **Icons**: Phosphor Icons
-- **APIs**: Finnhub (Finance), TheSportsDB (Sports)
+- **APIs**: Finnhub (Stocks)
 
 ## Getting Started
 
@@ -83,27 +86,21 @@ npm run preview
 ```
 src/
 ├── components/
-│   ├── finance/          # Stock, chart, news widgets
-│   ├── layout/           # Dashboard grid, sidebar, topbar
-│   └── sports/           # Match predictions, form table, scores
+│   ├── finance/          # Stock, chart, news, trading widgets
+│   └── layout/          # Dashboard grid, sidebar, topbar
 ├── hooks/
-│   ├── useStockData.js   # Finnhub API integration
-│   └── useSportsData.js  # Sports data & predictions
+│   └── useStockData.js  # Stock data & Finnhub API
 ├── services/
-│   ├── predictions.js     # Stock signal generation
-│   └── stockAPI.js        # Finnhub API calls
+│   ├── predictions.js   # Signal generation
+│   └── stockAPI.js      # Finnhub API calls
 ├── store/
-│   └── dashboardStore.js  # Zustand global state
+│   ├── dashboardStore.js  # Widget state
+│   └── tradeStore.js      # Trade simulation state
 ├── utils/
-│   └── predictions.js     # Signal calculations
+│   └── notifications.js   # Sound & browser notifications
 ├── App.jsx
 └── main.jsx
 ```
-
-## API Limitations
-
-- **Finnhub**: Free tier provides real-time quotes for US stocks
-- **TheSportsDB**: Free tier has a known issue returning identical data for all leagues. Match predictions use mock data with real team names to ensure variety.
 
 ## Design
 
