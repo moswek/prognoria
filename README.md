@@ -1,48 +1,58 @@
-# PROGNORIA
+<div align="center">
 
-A professional predictive analytics dashboard for Finance and Stock Market trading. Built with React, Vite, and Tailwind CSS.
+# ⬡ PROGNORIA
 
-![Prognoria](https://img.shields.io/badge/Prognoria-Predictive%20Analytics-00ff9d?style=for-the-badge)
-![React](https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react)
-![Vite](https://img.shields.io/badge/Vite-8.0-646cff?style=flat-square&logo=vite)
+**Predictive Analytics Dashboard for Finance & Stock Market Trading**
 
-## Features
+[![React](https://img.shields.io/badge/React_19-61dafb?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite_8-646cff?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Zustand](https://img.shields.io/badge/Zustand-orange?style=flat-square)](https://github.com/pmndrs/zustand)
+[![License: MIT](https://img.shields.io/badge/License-MIT-00ff9d?style=flat-square)](./LICENSE)
 
-### Stock Signals
-- Real-time buy/sell/hold recommendations for major stocks
-- Entry zones, exit targets, and stop loss levels
-- Risk assessment and confidence scores
-- Quick trade execution from signals
+</div>
 
-### Market Ticker
-- Live scrolling display of global stock exchange times
-- NYSE, LSE, TSE, HKEX, SSE, FWB, ASX, SGX
-- Real-time open/closed status based on market hours
+---
 
-### Trading Simulator
-- Virtual trading with customizable capital
-- Track open positions and trade history
-- Win rate and P&L analysis
-- Position sizing based on signal recommendations
+## ✦ Features
 
-### Additional Widgets
-- **Stock Chart** - Interactive 4-hour timeframe charts with search
-- **Trend Predictor** - Technical analysis (RSI, momentum, support/resistance)
-- **News Widget** - Latest market news
-- **Watchlist** - Track favorite stocks
+### 📈 Stock Signals
+Real-time buy / sell / hold recommendations with entry zones, exit targets, and stop loss levels. Each signal includes a risk assessment score, confidence rating, and a quick-execute button to open a simulated trade directly.
 
-## Tech Stack
+### 🕐 Market Ticker
+Live scrolling display of global stock exchange open/closed status — NYSE, LSE, TSE, HKEX, SSE, FWB, ASX, SGX — with real-time status based on actual market hours.
 
-- **Frontend**: React 19, Vite
-- **Styling**: Tailwind CSS
-- **State Management**: Zustand
-- **Charts**: Recharts
-- **Icons**: Phosphor Icons
-- **APIs**: Finnhub (Stocks)
+### 🎮 Trading Simulator
+Paper-trade with customizable virtual capital. Track open positions, view full trade history, and analyze your win rate and P&L. Position sizing is automatically calculated from signal recommendations.
 
-## Getting Started
+### 🧩 Additional Widgets
+
+| Widget | Description |
+|---|---|
+| **Stock Chart** | Interactive 4-hour timeframe charts with symbol search |
+| **Trend Predictor** | Technical analysis via RSI, momentum, support & resistance |
+| **News Widget** | Latest market news feed |
+| **Watchlist** | Track and monitor your favourite stocks |
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Vite |
+| Styling | Tailwind CSS |
+| State Management | Zustand |
+| Charts | Recharts |
+| Icons | Phosphor Icons |
+| Data API | Finnhub |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
@@ -56,60 +66,70 @@ cd prognoria
 # Install dependencies
 npm install
 
-# Create .env file with your API keys
+# Set up environment variables
 cp .env.example .env
 ```
 
 ### Environment Variables
 
-Create a `.env` file in the root directory:
+Add your API key to `.env`:
 
 ```env
 VITE_FINNHUB_KEY=your_finnhub_api_key
 ```
 
-Get your free Finnhub API key at: https://finnhub.io/
+> Get a free Finnhub API key at [finnhub.io](https://finnhub.io)
 
-### Running the App
+### Run the App
 
 ```bash
-# Development
+# Development server
 npm run dev
 
-# Production Build
+# Production build
 npm run build
 npm run preview
 ```
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   ├── finance/          # Stock, chart, news, trading widgets
-│   └── layout/          # Dashboard grid, sidebar, topbar
+│   ├── finance/          # Stock, chart, news & trading widgets
+│   └── layout/           # Dashboard grid, sidebar, topbar
 ├── hooks/
-│   └── useStockData.js  # Stock data & Finnhub API
+│   └── useStockData.js   # Stock data & Finnhub API integration
 ├── services/
-│   ├── predictions.js   # Signal generation
-│   └── stockAPI.js      # Finnhub API calls
+│   ├── predictions.js    # Signal generation logic
+│   └── stockAPI.js       # Finnhub API calls
 ├── store/
-│   ├── dashboardStore.js  # Widget state
-│   └── tradeStore.js      # Trade simulation state
+│   ├── dashboardStore.js # Widget layout state
+│   └── tradeStore.js     # Trade simulation state
 ├── utils/
-│   └── notifications.js   # Sound & browser notifications
+│   └── notifications.js  # Sound & browser notifications
 ├── App.jsx
 └── main.jsx
 ```
 
-## Design
+---
 
-Dark theme optimized dashboard with:
-- Background: `#0a0a0f`
-- Card Background: `#13131a`
-- Accent Color: `#00ff9d`
-- Fonts: Space Mono (data), Syne (headings)
+## 🎨 Design
 
-## License
+Dark-first dashboard optimised for extended trading sessions.
 
-MIT
+| Token | Value |
+|---|---|
+| Background | `#0a0a0f` |
+| Card Background | `#13131a` |
+| Accent | `#00ff9d` |
+| Data Font | Space Mono |
+| Heading Font | Syne |
+
+---
+
+## 📄 License
+
+MIT — free to use, modify, and distribute.
