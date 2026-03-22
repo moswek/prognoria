@@ -72,8 +72,8 @@ const Sidebar = () => {
       </div>
 
       <div className="p-4 border-t border-white/5">
-        <p className="text-xs text-gray-600 text-center">
-          Layout saved to localStorage
+        <p className="text-xs text-gray-600 text-left">
+          © 2026 Digital Talisman
         </p>
       </div>
     </aside>
