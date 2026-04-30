@@ -50,7 +50,7 @@ const TradeSimulator = () => {
 
       {isOpen && (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
             <div className="p-3 bg-white/5 rounded-lg">
               <p className="text-xs text-gray-500">Capital</p>
               <div className="flex items-center gap-2 mt-1">
@@ -84,6 +84,35 @@ const TradeSimulator = () => {
               <p className="text-xs text-gray-500">Trades</p>
               <p className="font-mono text-lg font-bold mt-1 text-white">
                 {stats.wins} <span className="text-accent">W</span> / {stats.losses} <span className="text-negative">L</span>
+              </p>
+            </div>
+
+            <div className="p-3 bg-white/5 rounded-lg">
+              <p className="text-xs text-gray-500">Avg Win</p>
+              <p className="font-mono text-lg font-bold mt-1 text-accent">${stats.avgWin}</p>
+            </div>
+
+            <div className="p-3 bg-white/5 rounded-lg">
+              <p className="text-xs text-gray-500">Avg Loss</p>
+              <p className="font-mono text-lg font-bold mt-1 text-negative">${stats.avgLoss}</p>
+            </div>
+
+            <div className="p-3 bg-white/5 rounded-lg">
+              <p className="text-xs text-gray-500">Profit Factor</p>
+              <p className="font-mono text-lg font-bold mt-1 ${stats.profitFactor >= 1 ? 'text-accent' : 'text-negative'}">
+                {stats.profitFactor}
+              </p>
+            </div>
+
+            <div className="p-3 bg-white/5 rounded-lg">
+              <p className="text-xs text-gray-500">Max Drawdown</p>
+              <p className="font-mono text-lg font-bold mt-1 text-negative">${stats.maxDrawdown}%</p>
+            </div>
+
+            <div className="p-3 bg-white/5 rounded-lg">
+              <p className="text-xs text-gray-500">Sharpe Ratio</p>
+              <p className="font-mono text-lg font-bold mt-1 ${stats.sharpeRatio >= 1 ? 'text-accent' : 'text-negative'}">
+                {stats.sharpeRatio}
               </p>
             </div>
           </div>
